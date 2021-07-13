@@ -7,6 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MochaCoffee.Data;
+using MochaCoffee.Services.Customer;
+using MochaCoffee.Services.Inventory;
+using MochaCoffee.Services.Order;
 using MochaCoffee.Services.Product;
 using System;
 using System.Collections.Generic;
@@ -35,6 +38,9 @@ namespace MochaCoffee.Web
             });
 
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<ICustomerService, CustomerService>();
+            services.AddTransient<IInventoryService, InventoryService>();
+            services.AddTransient<IOrderService, OrderService>();
 
             services.AddSpaStaticFiles(configuration =>
             {
