@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MochaCoffee.Services.Product;
+using MochaCoffee.Web.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace MochaCoffee.Web.Controllers
 {
     [ApiController]
-    public class ProductController : Controller
+    public class ProductController : ControllerBase
     {
         private readonly ILogger<ProductController> _logger;
         private readonly IProductService _productService;
@@ -25,7 +26,10 @@ namespace MochaCoffee.Web.Controllers
         {
             _logger.LogInformation("Getting all products");
             var products = _productService.GetAllProducts();
-            return Ok(products);
+
+            var productViewModels = products.Select(ProductMapper.SerializeProductModel);
+
+            return Ok(productViewModels);
         }
     }
 }

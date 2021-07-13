@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MochaCoffee.Data;
+using MochaCoffee.Services.Product;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,9 @@ namespace MochaCoffee.Web
                 opts.EnableDetailedErrors();
                 opts.UseNpgsql(Configuration.GetConnectionString("mocha.dev"));
             });
+
+            services.AddTransient<IProductService, ProductService>();
+
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp";
