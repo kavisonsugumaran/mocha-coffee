@@ -1,24 +1,17 @@
 ﻿import { createWebHistory, createRouter } from "vue-router";
-import Home from "@/components/Home.vue";
-import Counter from "@/components/Counter.vue";
-import FetchData from "@/components/FetchData.vue";
+import Inventory from "@/views/Inventory.vue"
 
 const routes = [
     {
         path: "/",
         name: "Home",
-        component: Home,
+        component: Inventory,
     },
     {
-        path: "/Counter",
-        name: "Counter",
-        component: Counter,
+        path: "/inventory",
+        name: "Inventory",
+        component: Inventory,
     },
-    {
-        path: "/FetchData",
-        name: "FetchData",
-        component: FetchData,
-    }
 ];
 
 const router = createRouter({
