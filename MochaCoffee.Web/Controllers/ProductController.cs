@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using MochaCoffee.Services.Product;
 using MochaCoffee.Web.Serialization;
+using MochaCoffee.Web.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,19 @@ namespace MochaCoffee.Web.Controllers
         {
             _logger = logger;
             _productService = productService;
+        }
+
+        [HttpPost("/api/product")]
+        public ActionResult AddProduct([FromBody] ProductModel product)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            _logger.LogInformation("Adding product");
+            var newProduct = ProductMapper.SerializeProductModel(product);
+            var newProductReponse = _productService.CreateProduct(newProduct);
+            return Ok(newProductReponse);
         }
 
         [HttpGet("/api/product")]

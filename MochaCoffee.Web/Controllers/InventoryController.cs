@@ -43,6 +43,10 @@ namespace MochaCoffee.Web.Controllers
         [HttpPatch("/api/inventory")]
         public ActionResult UpdateInventory([FromBody] ShipmentModel shipment)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             _logger.LogInformation("Updating inventory");
 
             var id = shipment.ProductId;

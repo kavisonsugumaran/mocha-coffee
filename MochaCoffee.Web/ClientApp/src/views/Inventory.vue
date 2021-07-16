@@ -27,7 +27,7 @@
         <td>
           {{ item.product.name }}
         </td>
-        <td>
+        <td :class="`${applyColor(item.quantityOnHand, item.idealQuantity)}`">
           {{ item.quantityOnHand }}
         </td>
         <td>
@@ -41,8 +41,7 @@
             No
           </span>
         </td>
-        <td>
-          X
+        <td class="lni lni-cross-circle product-archive" @click="archiveProduct(item.product.id)">
         </td>
       </tr>
     </table>
@@ -56,6 +55,7 @@
 import MochaButton from '../components/MochaButton.vue';
 import ShipmentModal from '../components/Modals/ShipmentModal.vue';
 import NewProductModal from '../components/Modals/NewProductModal.vue';
+import axios from 'axios';
 
 
 export default {
@@ -63,52 +63,30 @@ export default {
   components: { MochaButton, ShipmentModal, NewProductModal },
   data() {
     return {
-      inventory:[
-        {
-          id: 1,
-          product: {
-            id: 1,
-            name: "Some Product",
-            description: "Good Stuff",
-            price: 100,
-            createdOn: new Date(),
-            updatedOn: new Date(),
-            isTaxable: true,
-            isArchived: false,
-          },
-          quantityOnHand: 100,
-          idealQuantity: 100
-        },
-        {
-          id: 2,
-          product: {
-            id: 1,
-            name: "Another Product",
-            description: "Good Stuff",
-            price: 100,
-            createdOn: new Date(),
-            updatedOn: new Date(),
-            isTaxable: false,
-            isArchived: false,
-          },
-          quantityOnHand: 40,
-          idealQuantity: 20
-        },
-      ],
+      inventory:[],
       isNewProductVisible: false,
       isShipmentVisible: false,
+      API_URL: "",
     };
   },
   methods: {
+    applyColor(current, target) {
+      if (current <= 0) {
+        return "red";
+      } else if (Math.abs(target-current) > 8) {
+        return "yellow";
+      } else return "green";
+    },
     closeModals() {
       this.isNewProductVisible = false;
       this.isShipmentVisible = false;
     },
-    saveNewProduct(newProduct) {
-      console.log(newProduct);
-    },
-    saveNewShipment(shipment) {
-      console.log(shipment);
+    async saveNewShipment(shipment) {
+      await axios.patch(`${this.API_URL}/inventory`, shipment).then((resp) => {
+        console.log(resp);
+      })
+      this.isShipmentVisible = false;
+      await this.initialize();
     },
     showNewProductModal() {
       this.isNewProductVisible = true;
@@ -116,10 +94,60 @@ export default {
     showShipmentModal() {
       this.isShipmentVisible = true;
     },
+    async initialize() {
+      await axios.get(`${this.API_URL}/inventory`).then((resp) => {
+        this.inventory = resp.data;
+        console.log(resp);
+      });
+    },
+    async archiveProduct(productId) {
+      await axios.patch(`${this.API_URL}/product/${productId}`).then((resp) => {
+        console.log(resp);
+      })
+      await this.initialize();
+    },
+    async saveNewProduct(newProduct) {
+      await axios.post(`${this.API_URL}/product`, newProduct).then((resp) => {
+        console.log(resp);
+      })
+      this.isNewProductVisible = false;
+      await this.initialize();
+    },
   },
+  async created() {
+    this.API_URL = process.env.VUE_APP_API_URL;
+    await this.initialize();
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 @import "@/scss/global.scss";
+
+.green {
+  font-weight: bold;
+  color: $mocha-green;
+}
+
+.yellow {
+  font-weight: bold;
+  color: $mocha-yellow;
+}
+
+.red {
+  font-weight: bold;
+  color: $mocha-red;
+}
+
+.inventory-actions {
+  display: flex;
+  margin-bottom: 0.8rem;
+}
+
+.product-archive {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: $mocha-red;
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
 <div class="btn-link">
-  <Button @click="onClick" :class="['mocha-button', {'full-width' : isFullWidth}]" type="button">
+  <Button @click="onClick" :disabled="disabled" :class="['mocha-button', {'full-width' : isFullWidth}]" type="button">
     <slot></slot>
   </Button>
 </div>
@@ -9,7 +9,7 @@
 <script>
 export default {
   name: "MochaButton",
-  props: ['isFullWidth'],
+  props: ['isFullWidth', 'disabled'],
   methods:{
     onClick() {
       this.$emit("click-event");
