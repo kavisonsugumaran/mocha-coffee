@@ -27,7 +27,7 @@
             {{ getStatus(order.isPaid) }}
           </td>
           <td>
-            <div v-if="!order.isPaid" class="lni lni-check-mark-circle order-complete" @click="markComplete(order.id)">
+            <div v-if="!order.isPaid" class="lni lni-checkmark-circle order-complete green" @click="markComplete(order.id)">
             </div>
           </td>
         </tr>
