@@ -300,9 +300,9 @@ export default {
   width: 100%;
 }
 
-.invoice-step {
+// .invoice-step {
 
-}
+// }
 .invoice-step-detail {
   margin: 1.2rem;
 }
