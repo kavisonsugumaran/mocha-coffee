@@ -21,7 +21,7 @@
             {{ order.id }}
           </td>
           <td>
-            {{ getTotal(order) }}
+            LKR {{ (getTotal(order)).toFixed(2) }}
           </td>
           <td :class="{ green: order.isPaid }">
             {{ getStatus(order.isPaid) }}

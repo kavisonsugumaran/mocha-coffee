@@ -45,7 +45,7 @@
       <div class="invoice-order-list" v-if="lineItems.length">
         <div class="runningTotal">
           <h3>Running Total:</h3>
-          {{ runningTotal  }}
+          LKR {{ (runningTotal).toFixed(2)  }}
         </div>
         <hr />
         <table class="table">
@@ -62,8 +62,8 @@
             <td>{{ lineItem.product.name }}</td>
             <td>{{ lineItem.product.description }}</td>
             <td>{{ lineItem.quantity }}</td>
-            <td>{{ lineItem.product.price }}</td>
-            <td>{{ (lineItem.product.price * lineItem.quantity)  }}</td>
+            <td>LKR {{ (lineItem.product.price).toFixed(2) }}</td>
+            <td>LKR {{ (lineItem.product.price * lineItem.quantity).toFixed(2)  }}</td>
           </tr>
         </table>
       </div>
@@ -83,7 +83,7 @@
 
           <div class="invoice-order-list" v-if="lineItems.length">
             <div class="invoice-header">
-              <h3>Invoice: {{ new Date() }}</h3>
+              <h3>Invoice: {{ invoiceNo }}</h3>
               <h3> 
                 Customer: {{ selectedCustomer.firstName + " " + selectedCustomer.lastName }}
               </h3>
@@ -116,9 +116,9 @@
                 <td>{{ lineItem.product.name }}</td>
                 <td>{{ lineItem.product.description }}</td>
                 <td>{{ lineItem.quantity }}</td>
-                <td>{{ lineItem.product.price }}</td>
+                <td>LKR {{ (lineItem.product.price).toFixed(2) }}</td>
                 <td>
-                  {{ (lineItem.product.price * lineItem.quantity) }}
+                 LKR {{ (lineItem.product.price * lineItem.quantity).toFixed(2) }}
                 </td>
               </tr>
               <tr>
@@ -128,7 +128,7 @@
               <tfoot>
                 <tr>
                   <td colspan="4" class="due">Balance due upon receipt:</td>
-                  <td class="price-final">{{ runningTotal }}</td>
+                  <td class="price-final">LKR {{ (runningTotal).toFixed(2) }}</td>
                 </tr>
               </tfoot>
             </table>
@@ -185,6 +185,9 @@ export default {
     await this.initialize();
   },
   computed: {
+    invoiceNo() {
+      return Math.floor(Math.random()*(10000-1+1)+1);
+    },
     canGoNext() {
       if (this.invoiceStep === 1) {
         return this.selectedCustomerId !== 0;
@@ -231,11 +234,15 @@ export default {
       this.invoiceStep += 1;
     },
     startOver() {
+      console.log("start");
+      this.selectedCustomerId = 0;
+      this.lineItems = [],
       this.invoice = {
         customerId: 0,
         lineItems: []
       };
       this.invoiceStep = 1;
+      console.log("end");
     },
     addLineItem() {
       let newItem = {

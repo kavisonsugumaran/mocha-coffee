@@ -29,7 +29,7 @@
           {{ customer.primaryAddress.state }}
         </td>
         <td>
-          {{ moment(customer.createdOn).format("ddd MMM DD, YYYY [at] HH:mm a") }}
+          {{ moment(customer.createdOn).format("ddd MMM DD, YYYY") }}
         </td>
         <td>
           <div class="lni lni-cross-circle customer-delete" @click="deleteCustomer(customer.id)"> 
